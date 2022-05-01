@@ -15,28 +15,44 @@ const { NotImplementedError } = require('../extensions/index.js');
  */
 function transform(arr) {
 
-  try {
-    Array.isArray(arr);
-  } catch (e) {
-    if (e instanceof Error) {
-      throw new Error("'arr' parameter must be an instance of the Array!");
-    } else {
-      throw e; // re-throw the error unchanged
-    }
-  }
+  if (!Array.isArray(arr))
+    throw new Error("'arr' parameter must be an instance of the Array!");
 
   let resultArr =[]
 
-  for (let i =0; i < arr.length; i++){
-    if(typeof(arr[i]) == "number") {resultArr.push(arr[i])}
-    else if(arr[i] == "--discard-next" && i !== arr.length -1){ i++ }
-    else if(arr[i] == "--discard-prev" && i !== 0){resultArr.pop(resultArr.length -1)}
-    else if (arr[i] == "--double-next" && i !== arr.length -1) {resultArr.push(arr[i+1])}
-    else if(arr[i] == "--double-prev" && i !== 0){resultArr.push(resultArr[resultArr.length-1])}
+  for (let i = 0; i < arr.length; i++){
+    //if(arr[i] !== "--discard-next" || arr[i] !== "--discard-prev"|| arr[i] !== "--double-next"|| arr[i] !== "--double-prev" ) {resultArr.push(arr[i])}
+    // if (arr[i] == "--discard-next"){ 
+    //     if (i < arr.length-1) {i++} 
+    // } else if(arr[i] == "--discard-prev"){
+    //     if (i>0){resultArr.pop();}
+    // } else if (arr[i] == "--double-next" ) {
+    //     if (i < arr.length-1){resultArr.push(arr[i+1])}
+    // } else if(arr[i] == "--double-prev"){
+    //     if (i>0){resultArr.push(resultArr[resultArr.length-1])} ;
+    // } else if(arr[i] !== "--discard-next" && arr[i] !== "--discard-prev"&& arr[i] !== "--double-next"&& arr[i] !== "--double-prev" ) {resultArr.push(arr[i])}
+    if (arr[i] == "--discard-next"){
+            if (i < arr.length-1 ) {
+                resultArr.push("empty") 
+                i++}
+    } else if(arr[i] == "--discard-prev"){
+           if (i > 0 && resultArr[resultArr.length -1] !== "empty") {resultArr.pop();}
+    }else if (arr[i] == "--double-next" ) {
+          if (i < arr.length-1){resultArr.push(arr[i+1])}
+    } else if(arr[i] == "--double-prev"){
+          if (i>0){resultArr.push(resultArr[resultArr.length-1])} ;
+    } else if(arr[i] !== "--discard-next" && arr[i] !== "--discard-prev"&& arr[i] !== "--double-next"&& arr[i] !== "--double-prev" ) {resultArr.push(arr[i])}
+
+    console.log(resultArr)
   }
+  resultArr = resultArr.filter((elem) => elem !== "empty")
 
   return resultArr
 }
+arr = [1, 2, 3, '--double-next', 1337, '--discard-prev', 4, 5]
+aa = transform(arr)
+//console.log(aa)
+
 
 module.exports = {
   transform

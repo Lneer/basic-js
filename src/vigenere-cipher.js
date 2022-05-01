@@ -75,8 +75,8 @@ class VigenereCipheringMachine {
         }
       }
     }
-    console.log(key)
-    console.log(srtringedMessage)
+    // console.log(key)
+    // console.log(srtringedMessage)
 
    for (let i =0; i< srtringedMessage.length; i++) {
      let symb =  ((srtringedMessage[i].codePointAt() - 65 +  Math.abs(-91+key[i].codePointAt()) ))%26 +65
