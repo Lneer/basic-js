@@ -26,50 +26,16 @@ function transform(arr) {
   }
 
   let resultArr =[]
-  let seqIndex = arr.findIndex((elem) => typeof(elem) =="string")
-  if (seqIndex ==-1) return resultArr 
-  
-  if (arr[seqIndex] == "--discard-next") {
-    if (seqIndex !== arr.length -1) {
-      resultArr = arr.slice(0,seqIndex).concat(arr.slice(seqIndex+2,arr.length ))
-      transform(resultArr)
-    } else {
-      resultArr =  arr.slice(0,arr.length -1)
-      transform(resultArr)
-    }
-}
-  else if (arr[seqIndex] == "--double-next") {
-    if (seqIndex !== arr.length -1) {
-      resultArr = arr.slice(0,seqIndex)
-      resultArr.push(arr[seqIndex+1])
-      resultArr = resultArr.concat(arr.slice(seqIndex+1,arr.length ))
-      transform(resultArr)
-    } else {
-      resultArr = arr.slice(0,arr.length -1)
-      transform(resultArr)}
-      
- }
-  else if (arr[seqIndex] == "--discard-prev") {
-    if (seqIndex !== 0) {
-      resultArr = arr.slice(0,seqIndex)
-      resultArr.pop(arr[seqIndex-1])
-      resultArr = resultArr.concat(arr.slice(seqIndex+1,arr.length ))
-      transform(resultArr)
-    } else {
-      resultArr =  arr.slice(1,arr.length)
-      transform(resultArr)}
-      
- }
-   else if (arr[seqIndex] == "--double-prev") {
-    if (seqIndex !== 0) {
-      resultArr = arr.slice(0,seqIndex)
-      resultArr.push(arr[seqIndex-1])
-      resultArr = resultArr.concat(arr.slice(seqIndex+1,arr.length ))
-      transform(resultArr)
-    } else {
-      resultArr = arr.slice(1,arr.length)
-      transform(resultArr)}
- }
+
+  for (let i =0; i < arr.length; i++){
+    if(typeof(arr[i]) == "number") {resultArr.push(arr[i])}
+    else if(arr[i] == "--discard-next" && i !== arr.length -1){ i++ }
+    else if(arr[i] == "--discard-prev" && i !== 0){resultArr.pop(resultArr.length -1)}
+    else if (arr[i] == "--double-next" && i !== arr.length -1) {resultArr.push(arr[i+1])}
+    else if(arr[i] == "--double-prev" && i !== 0){resultArr.push(resultArr[resultArr.length-1])}
+  }
+
+  return resultArr
 }
 
 module.exports = {
